@@ -25,6 +25,7 @@ class Client(object):
     _headers = None
 
     def __init__(self, address=None, private_key=None, 
+                 api_url=None,
                  headers=None,
                  logger=None):
         """IDEX API Client constructor
@@ -48,6 +49,9 @@ class Client(object):
             client = Client(address, private_key)
 
         """
+        if api_url:
+            self.API_URL = api_url
+
 
         self._start_nonce = None
         self._client_started = int(time.time() * 1000)
