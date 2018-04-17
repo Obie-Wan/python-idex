@@ -458,7 +458,7 @@ class Client(object):
             'market': market
         }
 
-        return self._post('returnOrderBook', False, json=data)
+        return self._post('returnOrderBookForMarket', False, json=data)
 
     def get_open_orders(self, market, address):
         """Get the open orders for a given market and address
