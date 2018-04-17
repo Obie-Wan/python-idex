@@ -187,6 +187,9 @@ class Client(object):
         """
         self._wallet_address = address.lower()
         nonce_res = self.get_my_next_nonce()
+        if 'nonce' not in nonce_res:
+            self._logger.error('Unable to get nonce from response: %s', nonce_res)
+
         self._start_nonce = nonce_res['nonce']
         if private_key:
             if re.match(r"^0x[0-9a-zA-Z]{64}$", private_key) is None:
