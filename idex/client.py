@@ -20,8 +20,12 @@ class Client(object):
     _private_key = None
     _contract_address = None
     _currency_addresses = {}
+    _logger = None
+    _headers = None
 
-    def __init__(self, address=None, private_key=None):
+    def __init__(self, address=None, private_key=None, 
+                 headers=None,
+                 logger=None):
         """IDEX API Client constructor
 
         Takes an optional wallet address parameter which enables helper functions
@@ -47,17 +51,27 @@ class Client(object):
         self._start_nonce = None
         self._client_started = int(time.time() * 1000)
 
-        self.session = self._init_session()
+        if not logger:
+            logger = logging.getLogger(__file__)
+        self._logger = logger
+
+        self.session = self._init_session(headers=headers)
 
         if address:
             self.set_wallet_address(address, private_key)
 
-    def _init_session(self):
+    def _init_session(self, headers=None):
 
         session = requests.session()
-        headers = {'Accept': 'application/json',
-                   'User-Agent': 'python-idex'}
+
+        default_headers = {'Accept': 'application/json',
+                           'User-Agent': 'python-idex'}
+        if headers:
+            default_headers.update(headers)
+      
         session.headers.update(headers)
+
+        self._logger.info('Init session with headers = %s', session.headers)
         return session
 
     def _get_nonce(self):
@@ -120,6 +134,7 @@ class Client(object):
             # remove the passed hash data
             del(kwargs['hash_data'])
 
+	self._logger.info('%s %s %s', method, uri, kwargs)
         response = getattr(self.session, method)(uri, **kwargs)
         return self._handle_response(response)
 
