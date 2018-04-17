@@ -70,7 +70,7 @@ class Client(object):
         if headers:
             default_headers.update(headers)
       
-        session.headers.update(headers)
+        session.headers.update(default_headers)
 
         self._logger.info('Init session with headers = %s', session.headers)
         return session
