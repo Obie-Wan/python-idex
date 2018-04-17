@@ -134,7 +134,7 @@ class Client(object):
             # remove the passed hash data
             del(kwargs['hash_data'])
 
-	self._logger.info('%s %s %s', method, uri, kwargs)
+        self._logger.info('%s %s %s', method, uri, kwargs)
         response = getattr(self.session, method)(uri, **kwargs)
         return self._handle_response(response)
 
